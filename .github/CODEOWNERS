@@ -1,0 +1,4 @@
+# Codeowners for Cloud Cost Optimizer
+*         @Devopstrio/finops-engineers
+/internal/ @Devopstrio/golang-architects
+/terraform/ @Devopstrio/platform-team

@@ -1,0 +1,31 @@
+name: Cloud Cost Optimizer CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go 1.22
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+
+    - name: Run Go Unit Test Suite
+      run: go test -v ./...
+
+    - name: Setup OpenTofu
+      uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: "1.8.5"
+
+    - name: OpenTofu Format Check
+      run: |
+        cd terraform
+        tofu fmt -check -recursive
