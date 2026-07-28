@@ -2,17 +2,17 @@ package optimizer
 
 // ResourceMetrics represents cloud resource utilization data
 type ResourceMetrics struct {
-	ResourceID   string  `json:"resource_id"`
-	CPUUtilPct   float64 `json:"cpu_util_pct"`
-	MemoryUtilPct float64 `json:"memory_util_pct"`
+	ResourceID     string  `json:"resource_id"`
+	CPUUtilPct     float64 `json:"cpu_util_pct"`
+	MemoryUtilPct  float64 `json:"memory_util_pct"`
 	MonthlyCostUSD float64 `json:"monthly_cost_usd"`
 }
 
 // OptimizationResult holds rightsizing recommendations
 type OptimizationResult struct {
-	ResourceID          string  `json:"resource_id"`
-	IsIdle              bool    `json:"is_idle"`
-	RecommendedAction   string  `json:"recommended_action"`
+	ResourceID           string  `json:"resource_id"`
+	IsIdle               bool    `json:"is_idle"`
+	RecommendedAction    string  `json:"recommended_action"`
 	EstimatedMonthlySave float64 `json:"estimated_monthly_save"`
 }
 
@@ -33,17 +33,17 @@ func NewOptimizerEngine(cpuIdleThreshold float64) *OptimizerEngine {
 func (oe *OptimizerEngine) EvaluateResource(res ResourceMetrics) OptimizationResult {
 	if res.CPUUtilPct < oe.cpuIdleThreshold {
 		return OptimizationResult{
-			ResourceID:          res.ResourceID,
-			IsIdle:              true,
-			RecommendedAction:   "Terminate or Downsize Instance",
+			ResourceID:           res.ResourceID,
+			IsIdle:               true,
+			RecommendedAction:    "Terminate or Downsize Instance",
 			EstimatedMonthlySave: res.MonthlyCostUSD * 0.80,
 		}
 	}
 
 	return OptimizationResult{
-		ResourceID:          res.ResourceID,
-		IsIdle:              false,
-		RecommendedAction:   "Maintain Current Instance Size",
+		ResourceID:           res.ResourceID,
+		IsIdle:               false,
+		RecommendedAction:    "Maintain Current Instance Size",
 		EstimatedMonthlySave: 0,
 	}
 }

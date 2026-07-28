@@ -7,7 +7,7 @@ import (
 
 // SavingsReport aggregates cost optimization savings across cloud workloads
 type SavingsReport struct {
-	TotalIdleResources int     `json:"total_idle_resources"`
+	TotalIdleResources  int     `json:"total_idle_resources"`
 	TotalMonthlySaveUSD float64 `json:"total_monthly_save_usd"`
 }
 
