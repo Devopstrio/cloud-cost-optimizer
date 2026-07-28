@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: finops-optimizer
+  labels:
+    name: finops-optimizer
+    app.kubernetes.io/managed-by: devopstrio
