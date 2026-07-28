@@ -1,0 +1,6 @@
+graph TD
+    Telemetry["Workload Telemetry Collector"] --> Router["API Gateway / Router"]
+    Router --> Engine["Optimizer Engine"]
+    Engine --> Advisor["FinOps Savings Advisor"]
+    Advisor --> Remediator["Auto-Remediator Engine"]
+    Remediator --> Cloud["Cloud Providers (AWS / Azure / GCP)"]

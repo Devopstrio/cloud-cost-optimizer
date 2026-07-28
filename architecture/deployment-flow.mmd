@@ -1,0 +1,5 @@
+flowchart TD
+    GitPush["Git Commit Push"] --> CI["GitHub Actions CI Pipeline"]
+    CI --> Test["Go Unit & Integration Test Suite"]
+    Test --> Build["Go Server Binary Build"]
+    Build --> Deploy["Kubernetes / OpenTofu Deployment"]

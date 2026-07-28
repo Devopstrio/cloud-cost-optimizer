@@ -1,0 +1,11 @@
+sequenceDiagram
+    participant Client as Workload Telemetry Collector
+    participant Engine as Optimizer Engine
+    participant Advisor as Savings Advisor
+    participant Remediator as Auto Remediator
+
+    Client->>Engine: Submit ResourceMetrics Payload
+    Engine->>Advisor: Send OptimizationResult List
+    Advisor-->>Engine: Return SavingsReport Summary
+    Engine->>Remediator: Trigger Auto-Remediation Policy
+    Remediator-->>Client: Execution Log & Remediation Status
