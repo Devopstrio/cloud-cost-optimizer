@@ -1,0 +1,14 @@
+# Go binaries and coverage
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.txt
+
+# OS & IDE files
+.DS_Store
+.idea/
+.vscode/
