@@ -9,90 +9,155 @@
 [![Build Status](https://img.shields.io/badge/Build-Passing-10B981?style=flat-square)](https://devopstrio.co.uk)
 [![Go Version](https://img.shields.io/badge/Go-1.22%2B-00ADD8.svg?style=flat-square)](https://go.dev)
 [![FinOps Remediation](https://img.shields.io/badge/FinOps-Remediation_Engine-8B5CF6?style=flat-square)](https://devopstrio.co.uk)
+[![Terraform](https://img.shields.io/badge/IaC-OpenTofu_1.8.5-FF5733?style=flat-square)](https://opentofu.org)
 
 </div>
 
 ---
 
-## ⚡ Technical Overview & Engine Scope
+## Overview
 
-The **Cloud Cost Optimizer** is an automated multi-cloud rightsizing, idle resource cleanup, and cost remediation engine written in **pure Golang (Go v1.22+)**.
+The **Cloud Cost Optimizer** accelerator provides a high-performance Golang engine and cloud platform infrastructure for automated multi-cloud workload rightsizing, idle resource identification, and policy-driven remediation.
 
-It analyzes workload CPU and memory telemetry, calculates potential monthly savings, and executes policy-driven dry-run or live auto-remediations.
+## Executive Summary
 
-![Cloud Cost Optimizer Architecture](docs/images/architecture_diagram.jpg)
+As enterprise organizations scale cloud infrastructure across AWS, Azure, and GCP, unmonitored compute waste and idle virtual machine instances inflate monthly spending. 
 
----
+This repository delivers an end-to-end Go 1.22+ engine (`internal/`), OpenTofu IaC modules (`terraform/`), and Kubernetes deployment overlays (`deployment/kubernetes/`) engineered to enterprise standards comparable to repositories maintained by Microsoft Azure, AWS Samples, and HashiCorp reference architectures.
 
-## 🔄 Cost Remediation Sequence Flow
+## Architecture
+
+![Architecture Diagram](images/architecture.png)
+
+### High-Level Execution Sequence
 
 ```mermaid
-graph LR
-    Telemetry[Workload Telemetry Collector] -->|1. Transmit Utilization Metrics| Engine[Optimizer Engine]
-    Engine --> IsWaste{Is Waste Identified?}
-    IsWaste -- Idle Resource --> Advisor[FinOps Savings Advisor]
-    IsWaste -- Active Resource --> Maintain[Maintain Resource Size]
-    Advisor -->|2. Aggregate Savings| Remediator[Auto-Remediator Engine]
-    Remediator -->|3. Execute Cleanup| Cloud["Cloud Providers (AWS / Azure / GCP)"]
+graph TD
+    Telemetry["Workload Telemetry Collector"] --> Router["API Gateway / Router"]
+    Router --> Engine["Optimizer Engine"]
+    Engine --> Advisor["FinOps Savings Advisor"]
+    Advisor --> Remediator["Auto-Remediator Engine"]
+    Remediator --> Cloud["Cloud Providers (AWS / Azure / GCP)"]
 ```
 
----
+## Core Capabilities
 
-## 📂 Repository Directory Layout
+- **Golang Rightsizing Engine**: High-throughput utilization evaluation (`internal/optimizer`) calculating monthly dollar savings for idle workloads.
+- **FinOps Savings Advisor**: Aggregates potential cost savings across cloud environments into executive recommendations (`internal/recommendation`).
+- **Policy-Driven Remediator**: Executes dry-run or live auto-remediation policies (`internal/remediation`) to clean up unutilized compute resources.
+- **Multi-Cloud IaC Automation**: OpenTofu and Terraform modules for VPC, IAM, ECS, and CloudWatch metric alarms.
+- **Kubernetes Production Overlays**: Kustomize environment overlays (`dev`, `test`, `prod`) for declarative GitOps deployment.
+
+## Repository Structure
 
 ```
 cloud-cost-optimizer/
-├── .github/
-│   └── workflows/
-│       └── optimizer-ci.yml     # Go 1.22 CI test pipeline
-├── docs/
-│   ├── ARCHITECTURE.md          # Architectural specification document
-│   ├── deployment-guide.md      # Deployment manual
-│   └── images/
-│       └── architecture_diagram.jpg # Visual blueprint diagram
-├── internal/
-│   ├── optimizer/
-│   │   ├── engine.go            # Resource rightsizing engine
-│   │   └── engine_test.go       # Engine unit tests
-│   ├── recommendation/
-│   │   ├── advisor.go           # FinOps savings advisor
-│   │   └── advisor_test.go      # Advisor unit tests
-│   └── remediation/
-│       ├── auto_remediator.go   # Automated remediation module
-│       └── auto_remediator_test.go # Remediator unit tests
-├── main.go                      # Go CLI server entrypoint
-├── main_test.go                 # Integration test suite
-├── go.mod                       # Go module manifest
-├── .gitignore                   # Git ignore file
-└── README.md                    # Engine documentation
+├── .github/              # CI/CD workflows, issue & PR templates, CODEOWNERS
+├── architecture/         # Mermaid sequence flow diagrams
+├── deployment/           # Kubernetes manifests & Kustomize environment overlays
+├── docs/                 # Enterprise architectural, deployment, & operational guides
+├── examples/             # Real-world request/response JSON payloads
+├── images/               # High-resolution architecture & workflow diagrams
+├── internal/             # Go source packages (optimizer, recommendation, remediation)
+├── terraform/            # Multi-cloud OpenTofu / Terraform IaC modules
+├── tests/                # Unit, integration, and API test suites
+├── Dockerfile            # Container build specification
+├── docker-compose.yml    # Multi-container local orchestration
+├── main.go               # Go CLI server entrypoint
+├── go.mod                # Go module manifest
+└── README.md             # Accelerator documentation manual
 ```
 
----
+## Technology Stack
 
-## 🚀 Quick Start Guide
+- **Core Engine**: Golang 1.22+
+- **Infrastructure as Code**: OpenTofu 1.8.5 / Terraform 1.6+
+- **Container Orchestration**: Docker, Docker Compose, Kubernetes 1.28+
+- **Testing & Quality**: Go Native Test Runner (`go test`), GitHub Actions CI
 
-### 1. Build Go Server Binary
+## Quick Start
 
 ```bash
 # Clone repository
 git clone https://github.com/Devopstrio/cloud-cost-optimizer.git
 cd cloud-cost-optimizer
 
-# Build server binary
+# Build Go server binary
 go build -o optimizer-server main.go
-```
 
-### 2. Execute Optimizer Engine
-
-```bash
+# Run server binary
 ./optimizer-server
-```
 
-### 3. Run Native Go Test Suite
-
-```bash
+# Run test suite
 go test -v ./...
 ```
+
+## Docker
+
+```bash
+# Build and run cost optimizer container
+docker build -t devopstrio/cloud-cost-optimizer:latest .
+docker-compose up --build -d
+```
+
+## Terraform
+
+```bash
+cd terraform
+tofu init
+tofu plan
+tofu apply -auto-approve
+```
+
+## Kubernetes
+
+```bash
+# Apply production overlay via Kustomize
+kubectl apply -k deployment/kubernetes/overlays/prod/
+```
+
+## Documentation
+
+- [`docs/Architecture.md`](docs/Architecture.md) &mdash; Detailed architectural design specifications
+- [`docs/GettingStarted.md`](docs/GettingStarted.md) &mdash; Local setup and installation manual
+- [`docs/ImplementationGuide.md`](docs/ImplementationGuide.md) &mdash; Custom Golang engine integration guide
+- [`docs/DeploymentGuide.md`](docs/DeploymentGuide.md) &mdash; Multi-cloud Kubernetes & Terraform deployment
+- [`docs/RepositoryGuide.md`](docs/RepositoryGuide.md) &mdash; Repository layout and module guide
+- [`docs/Roadmap.md`](docs/Roadmap.md) &mdash; Future feature roadmap
+- [`docs/FAQ.md`](docs/FAQ.md) &mdash; Frequently asked questions
+
+## Examples
+
+- [`examples/resource-rightsizing/`](examples/resource-rightsizing/) &mdash; Workload rightsizing evaluation payload
+- [`examples/savings-advisor/`](examples/savings-advisor/) &mdash; FinOps savings aggregation payload
+- [`examples/auto-remediation/`](examples/auto-remediation/) &mdash; Auto-remediation policy payload
+
+## Testing
+
+```bash
+# Execute unit, integration, and API test suites
+go test -v ./...
+```
+
+## Security
+
+Refer to [`SECURITY.md`](SECURITY.md) for reporting security vulnerabilities and vulnerability handling protocols.
+
+## Observability
+
+The platform exports structured CloudWatch log groups (`/aws/finops/cloud-cost-optimizer`) and metric alarms for real-time idle workload monitoring.
+
+## Multi-Cloud Strategy
+
+Infrastructure blueprints support AWS ECS/VPC deployment with modular extensions for Azure Virtual Machines and Google Cloud Run environments.
+
+## Roadmap
+
+See [`docs/Roadmap.md`](docs/Roadmap.md) for upcoming milestones including live AWS Auto Scaling Group rightsizing adapters and OPA policy guardrails.
+
+## Contributing
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for contribution guidelines and community standards.
 
 <div align="center">
 

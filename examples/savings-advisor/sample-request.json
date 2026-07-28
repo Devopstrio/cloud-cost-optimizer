@@ -1,0 +1,4 @@
+[
+  { "resource_id": "res-1", "is_idle": true, "estimated_monthly_save": 500.0 },
+  { "resource_id": "res-2", "is_idle": true, "estimated_monthly_save": 300.0 }
+]

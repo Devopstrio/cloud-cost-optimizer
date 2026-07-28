@@ -1,0 +1,6 @@
+{
+  "resource_id": "i-aws-idle-01",
+  "cpu_util_pct": 2.0,
+  "memory_util_pct": 8.0,
+  "monthly_cost_usd": 1200.0
+}

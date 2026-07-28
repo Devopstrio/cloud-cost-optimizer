@@ -1,0 +1,6 @@
+{
+  "resource_id": "i-aws-idle-01",
+  "is_idle": true,
+  "recommended_action": "Terminate or Downsize Instance",
+  "estimated_monthly_save": 960.0
+}
